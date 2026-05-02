@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إتمام الدفع - TransVid</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f7f3ee;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+  }
+
+  .box {
+    width: 100%;
+    max-width: 500px;
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    position: relative;
+  }
+
+  .back-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #916243;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  h2 { text-align: center; color: #333; margin-top: 40px; }
+
+  .summary {
+    background: #fdfaf7;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: 1px dashed #916243;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  input, select {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-sizing: border-box;
+    text-align: right;
+  }
+
+  /* زر تأكيد الطلب الخشبي */
+  button.pay-btn {
+    width: 100%;
+    padding: 15px;
+    background: #916243; 
+    color: #fff;
+    border: none;
+    font-size: 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 15px;
+  }
+
+  /* التعديل الجوهري: نافذة النجاح في منتصف الشاشة فوق الكل */
+  .success-popup {
+    position: fixed; /* يجعلها تطفو فوق كل شيء */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0); /* توسيط دقيق */
+    background: rgba(255, 255, 255, 0.98);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    z-index: 10000; /* أعلى قيمة لضمان الظهور فوق الكل */
+    text-align: center;
+    border: 2px solid #2ed573;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    min-width: 280px;
+  }
+
+  .success-popup.show {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .success-popup i {
+    font-size: 70px;
+    color: #2ed573;
+    display: block;
+    margin-bottom: 15px;
+  }
+
+  .success-popup span {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+  }
+</style>
+</head>
+
+<body>
+
+<div id="successPopup" class="success-popup">
+    <i class="fas fa-check-circle"></i>
+    <span id="popupMessage">تم تأكيد الطلب بنجاح!</span>
+</div>
+
+<div class="box">
+  <a href="javascript:history.back()" class="back-btn">
+    <i class="fas fa-arrow-right"></i> رجوع
+  </a>
+
+  <h2>💳 إتمام الدفع</h2>
+
+  <div class="summary">
+    الإجمالي المطلوب: <span id="total">0</span> $
+  </div>
+
+  <input type="text" id="custName" placeholder="الاسم الكامل">
+  <input type="text" id="custPhone" placeholder="رقم الهاتف">
+  <input type="text" id="custAddress" placeholder="العنوان بالتفصيل">
+
+  <select id="payMethod">
+    <option value="">اختر طريقة الدفع</option>
+    <option value="عند الاستلام">الدفع عند الاستلام</option>
+    <option value="تحويل بنكي">تحويل بنكي</option>
+  </select>
+
+  <button class="pay-btn" onclick="pay()">تأكيد الطلب</button>
+</div>
+
+<script>
+// جلب البيانات من السلة
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+// حساب الإجمالي (تأكد من أن السعر مخزن كرقم في السلة)
+let totalValue = cart.reduce((sum, item) => {
+    // تنظيف السعر من علامة $ إذا كانت موجودة وتحويله لرقم
+    let price = parseFloat(item.price.replace(/[^0-9.]/g, '')) || 0;
+    return sum + price;
+}, 0);
+
+document.getElementById("total").innerText = totalValue.toFixed(2);
+
+function showSuccessPopup(msg) {
+    const popup = document.getElementById("successPopup");
+    document.getElementById("popupMessage").innerText = msg;
+    popup.classList.add("show");
+}
+
+function pay() {
+    const name = document.getElementById("custName").value;
+    const phone = document.getElementById("custPhone").value;
+    const address = document.getElementById("custAddress").value;
+    const method = document.getElementById("payMethod").value;
+
+    if (cart.length === 0) {
+        alert("السلة فارغة حالياً!");
+        return;
+    }
+
+    if (name === "" || phone === "" || address === "" || method === "") {
+        alert("الرجاء إكمال جميع البيانات المطلوبة");
+        return;
+    }
+
+    // حفظ الطلب في سجل الطلبات
+    let orders = JSON.parse(localStorage.getItem("orders")) || [];
+    let newOrder = {
+        orderId: Date.now(),
+        customer: name,
+        items: cart,
+        date: new Date().toLocaleString('ar-YE'),
+        total: totalValue.toFixed(2),
+        payment: method,
+        status: "قيد التنفيذ" // إضافة الحالة لتظهر في صفحة الطلبات
+    };
+
+    orders.push(newOrder);
+    localStorage.setItem("orders", JSON.stringify(orders));
+
+    // إظهار الرسالة في منتصف الشاشة (تم تحديث مكان ظهورها في الـ body)
+    showSuccessPopup("تم تأكيد طلبك بنجاح 🎉");
+
+    localStorage.removeItem("cart");
+
+    // الانتظار قليلاً لتظهر الرسالة ثم التوجيه
+    setTimeout(() => {
+        window.location.href = "kitchens.html";
+    }, 2000); // 2000 ميلي ثانية تعادل ثانيتين
+}
+</script>
+
+</body>
+</html>

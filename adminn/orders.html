@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>الطلبات</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body{
+      background:#f4f6f9;
+      font-family: Arial;
+    }
+
+    .sidebar{
+      position:fixed;
+      right:0;
+      top:0;
+      width:240px;
+      height:100vh;
+      background:#5a3e2b;
+      color:white;
+      padding-top:20px;
+    }
+
+    .sidebar a{
+      display:block;
+      color:white;
+      padding:12px;
+      text-decoration:none;
+    }
+
+    .sidebar a:hover{
+      background:#3e2a1e;
+    }
+
+    .main{
+      margin-right:260px;
+      padding:20px;
+    }
+
+    .card-box{
+      border:none;
+      border-radius:15px;
+      box-shadow:0 5px 15px rgba(0,0,0,0.08);
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <h4 class="text-center mb-3">⚙️ الأدمن</h4>
+  <a href="#">🏠 الرئيسية</a>
+  <a href="home.html">🛍️ المنتجات</a>
+  <a href="orders.html">🛒 الطلبات</a>
+    <a href="catergory.html">🧩 الأقسام</a>
+<a href="reports.html">📊 التقارير</a>
+  <a href="users.html">👤 المستخدمين</a>
+<a href="#" onclick="logout()">🚪 تسجيل خروج</a>
+
+</div>
+
+<!-- Main -->
+<div class="main">
+
+  <h2 class="mb-4">📦 إدارة الطلبات</h2>
+
+  <!-- Stats -->
+  <div class="row g-3 mb-4">
+
+    <div class="col-md-4">
+      <div class="card card-box p-3 text-center">
+        <h5>إجمالي الطلبات</h5>
+        <h3>25</h3>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card card-box p-3 text-center">
+        <h5>طلبات مكتملة</h5>
+        <h3>18</h3>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card card-box p-3 text-center">
+        <h5>طلبات قيد التنفيذ</h5>
+        <h3>7</h3>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Table -->
+  <div class="card card-box p-3">
+
+    <h5>📋 قائمة الطلبات</h5>
+
+    <table class="table table-hover text-center mt-3">
+
+      <thead class="table-dark">
+        <tr>
+          <th>العميل</th>
+          <th>المنتج</th>
+          <th>السعر</th>
+          <th>الحالة</th>
+          <th>تاريخ</th>
+          <th>إجراء</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr>
+          <td>أحمد</td>
+          <td>أريكة</td>
+          <td>$250</td>
+          <td><span class="badge bg-success">مكتمل</span></td>
+          <td>2026-03-24</td>
+          <td>
+            <button class="btn btn-danger btn-sm">حذف</button>
+          </td>
+        </tr>
+
+        <tr>
+          <td>محمد</td>
+          <td>طاولة</td>
+          <td>$180</td>
+          <td><span class="badge bg-warning">قيد التنفيذ</span></td>
+          <td>2026-03-24</td>
+          <td>
+            <button class="btn btn-danger btn-sm">حذف</button>
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+<script>
+
+    function logout(){
+
+  // حذف بيانات المستخدم (الأدمن)
+  localStorage.removeItem("user");
+
+  // (اختياري) حذف كل البيانات
+  // localStorage.clear();
+
+  alert("تم تسجيل الخروج بنجاح 👋");
+
+  // تحويل لصفحة تسجيل الدخول
+  window.location.href = "login.html";
+}
+</script>
+</body>
+</html>

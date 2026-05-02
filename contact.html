@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تواصل معنا - متجرك</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f3ee; /* توحيد لون الخلفية مع بقية الموقع */
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .box {
+            width: 100%;
+            max-width: 500px;
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        /* زر الرجوع الخشبي */
+        .back-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #916243;
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 13px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .back-btn:hover {
+            background: #5a3e2b;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-family: inherit;
+            outline: none;
+            text-align: right;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #916243;
+        }
+
+        textarea {
+            height: 120px;
+            resize: none;
+        }
+
+        /* زر الإرسال الخشبي */
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #916243;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #5a3e2b;
+        }
+
+        /* نافذة الصح الخضراء المخصصة لمشروعك */
+        .success-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: #fff;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+            z-index: 10000;
+            text-align: center;
+            border: 2px solid #2ed573;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .success-popup.active {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .success-popup i {
+            font-size: 60px;
+            color: #2ed573;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .success-popup span {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="popup" class="success-popup">
+    <i class="fas fa-check-circle"></i>
+    <span>تم الإرسال بنجاح!</span>
+</div>
+
+<div class="box">
+    <a href="javascript:history.back()" class="back-btn">
+        <i class="fas fa-chevron-right"></i> رجوع
+    </a>
+
+    <h2>📞 تواصل معنا</h2>
+
+    <input type="text" id="name" placeholder="الاسم الكامل">
+    <input type="text" id="phone" placeholder="رقم الهاتف">
+    <textarea id="msg" placeholder="اكتب رسالتك هنا..."></textarea>
+
+    <button onclick="send()">إرسال الرسالة</button>
+</div>
+
+<script>
+function send() {
+    const name = document.getElementById("name").value;
+    const phone = document.getElementById("phone").value;
+    const msg = document.getElementById("msg").value;
+
+    if(name === "" || phone === "" || msg === "") {
+        alert("الرجاء تعبئة جميع الحقول");
+        return;
+    }
+
+    // إظهار نافذة الصح الخضراء
+    const popup = document.getElementById("popup");
+    popup.classList.add("active");
+
+    // تفريغ الحقول
+    document.getElementById("name").value = "";
+    document.getElementById("phone").value = "";
+    document.getElementById("msg").value = "";
+
+    // إخفاء النافذة بعد ثانيتين
+    setTimeout(() => {
+        popup.classList.remove("active");
+    }, 2000);
+}
+</script>
+
+</body>
+</html>

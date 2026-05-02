@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>تفاصيل المنتج</title>
+
+<link rel="stylesheet" href="css/style2.css">
+
+<style>
+.details-container{
+  max-width: 500px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  font-family: Arial;
+  text-align: center;
+}
+
+.details-img{
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.price{
+  color: #27ae60;
+  font-size: 20px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.qty{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.qty button{
+  width: 35px;
+  height: 35px;
+  border: none;
+  background: #3498db;
+  color: white;
+  font-size: 20px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.qty input{
+  width: 60px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.total{
+  font-size: 18px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.cart-btn{
+  width: 100%;
+  padding: 12px;
+  border: none;
+  background: #895533;
+  color: white;
+  font-size: 18px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="details-container">
+
+  <img id="img" class="details-img">
+
+  <h2 id="name"></h2>
+
+  <p id="price" class="price"></p>
+
+  <p id="desc"></p>
+
+  <div class="qty">
+    <button onclick="changeQty(-1)">-</button>
+    <input type="number" id="qty" value="1" min="1" oninput="updateTotal()">
+    <button onclick="changeQty(1)">+</button>
+  </div>
+
+  <div class="total">
+    الإجمالي: <span id="total">0</span> ريال
+  </div>
+
+  <button class="cart-btn" onclick="addToCart()">
+    إضافة للسلة
+  </button>
+
+</div>
+
+<script>
+let product = JSON.parse(localStorage.getItem("product"));
+
+if(!product){
+  alert("لا يوجد منتج");
+  window.location.href = "home.html";
+}
+
+let price = parseFloat(product.price);
+
+document.getElementById("name").innerText = product.name;
+document.getElementById("img").src = product.img;
+document.getElementById("price").innerText = price + " ريال";
+document.getElementById("desc").innerText = product.desc;
+
+function changeQty(v){
+  let q = document.getElementById("qty");
+  q.value = Math.max(1, parseInt(q.value) + v);
+  updateTotal();
+}
+
+function updateTotal(){
+  let qty = parseInt(document.getElementById("qty").value);
+  let total = qty * price;
+  document.getElementById("total").innerText = total.toFixed(2);
+}
+
+// تشغيل أولي
+updateTotal();
+
+function addToCart(){
+  let qty = parseInt(document.getElementById("qty").value);
+
+  let cartItem = {
+    name: product.name,
+    price: price,
+    img: product.img,
+    qty: qty,
+    total: price * qty
+  };
+
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart.push(cartItem);
+  localStorage.setItem("cart", JSON.stringify(cart));
+
+  // 👉 الانتقال إلى صفحة السلة
+  window.location.href = "cart.html";
+}
+</script>
+
+</body>
+</html>

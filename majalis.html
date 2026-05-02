@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المجالس العربية - متجرك</title>
+    <link rel="stylesheet" href="css/style2.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        /* نافذة الصح الخضراء - تظهر فوق الكل وفي منتصف الشاشة */
+        .success-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: rgba(255, 255, 255, 0.98);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            z-index: 10000; /* أعلى قيمة لضمان الظهور فوق الكل */
+            text-align: center;
+            border: 2px solid #2ed573;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            min-width: 220px;
+        }
+
+        .success-popup.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .success-popup i {
+            font-size: 60px;
+            color: #2ed573;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .success-popup span {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* زر الرجوع الخشبي */
+        .back-btn-container {
+            max-width: 1200px;
+            margin: 20px auto 0;
+            padding: 0 15px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #916243;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            background: #5a3e2b;
+            transform: translateX(-5px);
+        }
+
+        /* عداد السلة في الـ Navbar */
+        .cart-icon-nav {
+            position: relative;
+            cursor: pointer;
+            font-size: 20px;
+            color: #fff;
+            margin-left: 20px;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #ff4757;
+            color: white;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="successPopup" class="success-popup">
+    <i class="fas fa-check-circle"></i>
+    <span id="popupMessage">تمت الإضافة بنجاح!</span>
+</div>
+
+<nav class="navbar">
+  <div class="menu-area">
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+  </div>
+
+  <div class="left-brand">
+    <div class="cart-icon-nav" onclick="window.location.href='cart.html'">
+        <i class="fas fa-shopping-cart"></i>
+        <span id="cartCount" class="cart-badge">0</span>
+    </div>
+    <div class="title">متجرك</div>
+    <div class="logo">🏠</div>
+  </div>
+</nav>
+
+<div class="back-btn-container">
+    <a href="javascript:history.back()" class="back-btn">
+        <i class="fas fa-chevron-right"></i> رجوع
+    </a>
+</div>
+
+<div id="sideMenu" class="side-menu">
+  <div class="menu-header">القائمة</div>
+  <a href="index2.html">🏠 الرئيسية</a>
+  <a href="orders.html"> 🛒 الطلبات </a>
+  <a href="favorites.html"> ❤️ المفضلات</a>
+  <a href="offers.html">🔥 العروض</a>
+  <a href="department.html">🧩 الأقسام</a>
+  <a href="contact.html"> 📞 تواصل معنا</a>
+  <a href="index.html" onclick="logout()">🚪 تسجيل خروج</a>
+</div>
+
+<div id="overlay" onclick="toggleMenu()"></div>
+
+<div class="search-box">
+  <input type="text" id="searchInput" placeholder="ابحث عن منتج..." oninput="searchProducts()">
+</div>
+
+<div class="products-container">
+
+  <div class="product-card">
+    <div class="fav" onclick="toggleFav(this)">🤍</div>
+    <img src="img/مجلس1.jpg">
+    <h3>مجلس عربي</h3>
+    <p class="price">250$</p>
+    <button class="btn" onclick="addToCart(this)">🛒 إضافة</button>
+    <button class="btn" onclick="openProduct(this)">تفاصيل</button>
+    <span class="data" data-name="مجلس عربي" data-img="img/مجلس1.jpg" data-price="250$" data-desc="مجلس عربي ارضي بتصميم حديث"></span>
+  </div>
+
+  <div class="product-card">
+    <div class="fav" onclick="toggleFav(this)">🤍</div>
+    <img src="img/مجلس3.jpg">
+    <h3>مجلس رجالي </h3>
+    <p class="price">400$</p>
+    <button class="btn" onclick="addToCart(this)">🛒 إضافة</button>
+    <button class="btn" onclick="openProduct(this)">تفاصيل</button>
+    <span class="data" data-name="مجلس رجالي " data-img="/img/مجلس3.jpg" data-price="400$" data-desc="مجلس رجالي فاخر وانيق مع الوان زاهيه"></span>
+  </div>
+
+  <div class="product-card">
+    <div class="fav" onclick="toggleFav(this)">🤍</div>
+    <img src="img/مجلس4.jpg">
+    <h3>مجلس عربي نص ارضية</h3>
+    <p class="price">900$</p>
+    <button class="btn" onclick="addToCart(this)">🛒 إضافة</button>
+    <button class="btn" onclick="openProduct(this)">تفاصيل</button>
+    <span class="data" data-name="مجلس عربي نص ارضية" data-img="img/مجلس4.jpg" data-price="900$" data-desc="مجلس عربي مص ارضية تصميم عربي سعودي "></span>
+  </div>
+
+  <div class="product-card">
+    <div class="fav" onclick="toggleFav(this)">🤍</div>
+    <img src="img/مجلس5.jpg">
+    <h3>مجلس عربي سعودي</h3>
+    <p class="price">670$</p>
+    <button class="btn" onclick="addToCart(this)">🛒 إضافة</button>
+    <button class="btn" onclick="openProduct(this)">تفاصيل</button>
+    <span class="data" data-name="مجلس عربي سعودي" data-img="img/مجلس5.jpg" data-price="670$" data-desc="مجلس عربي سعودي بتصميم حديث"></span>
+  </div>
+
+  <div class="product-card">
+    <div class="fav" onclick="toggleFav(this)">🤍</div>
+    <img src="img/مجلس6.jpg">
+    <h3>ديكور مجلس عربي</h3>
+    <p class="price">250$</p>
+    <button class="btn" onclick="addToCart(this)">🛒 إضافة</button>
+    <button class="btn" onclick="openProduct(this)">تفاصيل</button>
+    <span class="data" data-name="ديكور مجلس عربي" data-img="img/مجلس6.jpg" data-price="250$" data-desc="ديكور مجلس عربي بتصميم حديث وانيق"></span>
+  </div>
+
+  <div class="product-card">
+    <div class="fav" onclick="toggleFav(this)">🤍</div>
+    <img src="img/مجلسé.jpg">
+    <h3>مجلس مناسبات فاخر</h3>
+    <p class="price">400$</p>
+    <button class="btn" onclick="addToCart(this)">🛒 إضافة</button>
+    <button class="btn" onclick="openProduct(this)">تفاصيل</button>
+    <span class="data" data-name="مجلس مناسبات فاخر" data-img="img/مجلسé.jpg" data-price="400$" data-desc="مجلس مناسبات فاخر وانيق نسائي ورجالي"></span>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-section">
+      <h3>متجرك 🏠</h3>
+      <p>أفضل متجر للأثاث العصري والمريح بأسعار مناسبة.</p>
+    </div>
+    <div class="footer-section">
+      <h3>روابط سريعة</h3>
+      <a href="home.html">الرئيسية</a>
+      <a href="orders.html">الطلبات</a>
+      <a href="favorites.html">المفضلات</a>
+    </div>
+    <div class="footer-section">
+      <h3>تواصل معنا</h3>
+      <p>📞 +967 7XXXXXXX</p>
+      <p>📧 support@yourstore.com</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 جميع الحقوق محفوظة
+  </div>
+</footer>
+
+<script>
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let fav = JSON.parse(localStorage.getItem("fav")) || [];
+
+// تحديث عداد السلة عند التحميل
+function updateCartBadge() {
+    document.getElementById("cartCount").innerText = cart.length;
+}
+updateCartBadge();
+
+// وظيفة إظهار الصح الأخضر في منتصف الشاشة
+function showSuccessPopup(message) {
+    const popup = document.getElementById("successPopup");
+    document.getElementById("popupMessage").innerText = message;
+    popup.classList.add("show");
+    
+    setTimeout(() => {
+        popup.classList.remove("show");
+    }, 2000);
+}
+
+/* 🛒 إضافة للسلة */
+function addToCart(btn){
+  let card = btn.parentElement;
+  let product = {
+    name: card.querySelector("h3").innerText,
+    img: card.querySelector("img").src,
+    price: card.querySelector(".price").innerText
+  };
+
+  cart.push(product);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  
+  updateCartBadge();
+  showSuccessPopup("تمت الإضافة للسلة 🛒");
+}
+
+/* ❤️ إضافة / حذف من المفضلة */
+function toggleFav(el){
+  let card = el.parentElement;
+  let product = {
+    name: card.querySelector("h3").innerText,
+    img: card.querySelector("img").src,
+    price: card.querySelector(".price").innerText
+  };
+
+  let index = fav.findIndex(p => p.name === product.name);
+  if(index === -1){
+    fav.push(product);
+    el.innerHTML = "❤️";
+    showSuccessPopup("أضيف للمفضلة ❤️");
+  } else {
+    fav.splice(index, 1);
+    el.innerHTML = "🤍";
+  }
+  localStorage.setItem("fav", JSON.stringify(fav));
+}
+
+function loadFavState(){
+  document.querySelectorAll(".product-card").forEach(card => {
+    let name = card.querySelector("h3").innerText;
+    let heart = card.querySelector(".fav");
+    let exists = fav.find(p => p.name === name);
+    heart.innerHTML = exists ? "❤️" : "🤍";
+  });
+}
+loadFavState();
+
+function searchProducts(){
+  let val = document.getElementById("searchInput").value.toLowerCase();
+  let cards = document.querySelectorAll(".product-card");
+  cards.forEach(c=>{
+    let name = c.querySelector("h3").innerText.toLowerCase();
+    c.style.display = name.includes(val) ? "block" : "none";
+  });
+}
+
+function openProduct(btn){
+  let card = btn.parentElement;
+  let data = card.querySelector(".data");
+  let product = {
+    name: data.dataset.name,
+    img: data.dataset.img,
+    price: data.dataset.price,
+    desc: data.dataset.desc
+  };
+  localStorage.setItem("product", JSON.stringify(product));
+  window.location.href = "details.html";
+}
+
+function toggleMenu(){
+  document.getElementById("sideMenu").classList.toggle("active");
+  document.getElementById("overlay").classList.toggle("active");
+}
+
+/* 🚪 تسجيل خروج (المسار المعدل) */
+function logout(){
+  localStorage.removeItem("user");
+  showSuccessPopup("تم تسجيل الخروج بنجاح 👋");
+  
+  setTimeout(() => {
+      window.location.href = "../index.html";
+  }, 1000);
+}
+</script>
+
+</body>
+</html>

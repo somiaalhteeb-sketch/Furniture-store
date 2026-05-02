@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>إدارة الأقسام</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body{
+      background:#f4f6f9;
+      font-family: Arial;
+    }
+
+    /* Sidebar */
+    .sidebar{
+      position:fixed;
+      right:0;
+      top:0;
+      width:240px;
+      height:100vh;
+      background:#5a3e2b;
+      color:white;
+      padding-top:20px;
+    }
+
+    .sidebar h4{
+      text-align:center;
+      margin-bottom:20px;
+    }
+
+    .sidebar a{
+      display:block;
+      color:white;
+      padding:12px 20px;
+      text-decoration:none;
+      transition:0.2s;
+    }
+
+    .sidebar a:hover{
+      background:#3e2a1e;
+    }
+      .btn
+      {
+        margin: 10px
+      }
+    /* Main */
+    .main{
+      margin-right:260px;
+      padding:20px;
+    }
+
+    .card-box{
+      border:none;
+      border-radius:15px;
+      box-shadow:0 5px 15px rgba(0,0,0,0.08);
+    }
+
+    td img{
+      border-radius:10px;
+      object-fit:cover;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <h4>⚙️ لوحة الأدمن</h4>
+
+  <a href="#">🏠 الرئيسية</a>
+  <a href="home.html">🛍️ المنتجات</a>
+  <a href="orders.html">🛒 الطلبات</a>
+  <a href="category_home.html">📂 الأقسام</a>
+  <a href="reports.html">📊 التقارير</a>
+  <a href="users.html">👤 المستخدمين</a>
+  <a href="#" onclick="logout()">🚪 تسجيل خروج</a>
+</div>
+
+<!-- Main -->
+<div class="main">
+
+  <h2 class="mb-4">📂 إدارة الأقسام</h2>
+
+  <!-- Form -->
+  <div class="card card-box p-3 mb-4">
+    <h5>➕ إضافة / تعديل قسم</h5>
+
+    <input type="hidden" id="catIndex">
+
+    <input type="text" id="catName" class="form-control mb-2" placeholder="اسم القسم">
+    <input type="text" id="catImg" class="form-control mb-2" placeholder="رابط صورة القسم">
+
+    <button class="btn btn-primary" onclick="saveCategory()">حفظ القسم</button>
+    <button class="btn btn-secondary" onclick="clearCatForm()">إلغاء</button>
+  </div>
+
+  <!-- Table -->
+  <div class="card card-box p-3">
+    <h5>🧩 قائمة الأقسام</h5>
+
+    <table class="table table-hover text-center align-middle mt-3">
+
+      <thead class="table-dark">
+        <tr>
+          <th>الصورة</th>
+          <th>اسم القسم</th>
+          <th>إجراءات</th>
+        </tr>
+      </thead>
+
+      <tbody id="categoryTable"></tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+<script>
+/* 📂 الأقسام */
+let categories = JSON.parse(localStorage.getItem("categories")) || [];
+
+/* حفظ قسم */
+function saveCategory(){
+  let name = document.getElementById("catName").value;
+  let img = document.getElementById("catImg").value;
+  let index = document.getElementById("catIndex").value;
+
+  if(name === ""){
+    return alert("اكتب اسم القسم");
+  }
+
+  let category = { name, img };
+
+  if(index === ""){
+    categories.push(category);
+  } else {
+    categories[index] = category;
+  }
+
+  localStorage.setItem("categories", JSON.stringify(categories));
+  renderCategories();
+  clearCatForm();
+}
+
+/* عرض الأقسام */
+function renderCategories(){
+  let table = document.getElementById("categoryTable");
+  table.innerHTML = "";
+
+  categories.forEach((c, i) => {
+    table.innerHTML += `
+      <tr>
+        <td><img src="${c.img}" width="60" height="60"></td>
+        <td>${c.name}</td>
+        <td>
+          <button class="btn btn-warning btn-sm" onclick="editCategory(${i})">تعديل</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteCategory(${i})">حذف</button>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+/* تعديل قسم */
+function editCategory(i){
+  document.getElementById("catName").value = categories[i].name;
+  document.getElementById("catImg").value = categories[i].img;
+  document.getElementById("catIndex").value = i;
+}
+
+/* حذف قسم */
+function deleteCategory(i){
+  if(confirm("هل تريد حذف القسم؟")){
+    categories.splice(i,1);
+    localStorage.setItem("categories", JSON.stringify(categories));
+    renderCategories();
+  }
+}
+
+/* تنظيف الفورم */
+function clearCatForm(){
+  document.getElementById("catName").value = "";
+  document.getElementById("catImg").value = "";
+  document.getElementById("catIndex").value = "";
+}
+
+/* تشغيل */
+renderCategories();
+
+/* تسجيل خروج */
+function logout(){
+  localStorage.removeItem("user");
+  alert("تم تسجيل الخروج 👋");
+  window.location.href = "login.html";
+}
+</script>
+
+</body>
+</html>

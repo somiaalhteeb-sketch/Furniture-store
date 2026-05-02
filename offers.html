@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>العروض - متجرك</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background: #f7f3ee; /* توحيد لون الخلفية الخشبي */
+  margin: 0;
+  padding: 20px;
+}
+
+/* زر الرجوع الخشبي */
+.back-btn-container {
+    max-width: 800px;
+    margin: 0 auto 15px;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #916243;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.3s;
+    border: none;
+    cursor: pointer;
+}
+
+.back-btn:hover {
+    background: #5a3e2b;
+    transform: translateX(-5px);
+}
+
+.header{
+  text-align: center;
+  background: #fff;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  max-width: 800px;
+  margin: auto;
+}
+
+.header h2 {
+    margin: 0;
+    color: #333;
+}
+
+.container{
+  max-width: 800px;
+  margin: 20px auto;
+}
+
+.card{
+  background: #fff;
+  padding: 20px;
+  margin-bottom: 15px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  border-right: 5px solid #916243; /* لمسة خشبية جانبية */
+  transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+}
+
+.card h3 {
+    margin-top: 0;
+    color: #444;
+}
+
+.badge{
+  background: #ff4757;
+  color: #fff;
+  padding: 5px 12px;
+  border-radius: 20px;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+b {
+    color: #916243;
+    font-size: 18px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="back-btn-container">
+    <a href="javascript:history.back()" class="back-btn">
+        <i class="fas fa-chevron-right"></i> رجوع للخلف
+    </a>
+</div>
+
+<div class="header">
+  <h2>🔥 العروض الحصرية</h2>
+</div>
+
+<div class="container">
+
+  <div class="card">
+    <h3>أريكة فاخرة</h3>
+    <p>السعر بعد الخصم: <b>200$</b></p>
+    <span class="badge">خصم 20%</span>
+  </div>
+
+  <div class="card">
+    <h3>طاولة خشب مودرن</h3>
+    <p>السعر بعد الخصم: <b>150$</b></p>
+    <span class="badge">خصم 15%</span>
+  </div>
+
+  <div class="card">
+    <h3>إضاءة سقف كلاسيكية</h3>
+    <p>السعر بعد الخصم: <b>85$</b></p>
+    <span class="badge">خصم 30%</span>
+  </div>
+
+</div>
+
+</body>
+</html>

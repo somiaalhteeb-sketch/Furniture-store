@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>لوحة التحكم</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body{
+      background:#f4f6f9;
+      font-family: Arial;
+    }
+
+    /* Sidebar */
+    .sidebar{
+      position:fixed;
+      right:0;
+      top:0;
+      width:240px;
+      height:100vh;
+      background:#5a3e2b;
+      color:white;
+      padding-top:20px;
+    }
+
+    .sidebar h4{
+      text-align:center;
+      margin-bottom:20px;
+    }
+
+    .sidebar a{
+      display:block;
+      color:white;
+      padding:12px 20px;
+      text-decoration:none;
+      transition:0.2s;
+    }
+
+    .sidebar a:hover{
+      background:#3e2a1e;
+    }
+
+    /* Main */
+    .main{
+      margin-right:260px;
+      padding:20px;
+    }
+
+    /* Cards */
+    .card-box{
+      border:none;
+      border-radius:15px;
+      box-shadow:0 5px 15px rgba(0,0,0,0.08);
+    }
+
+    /* Product image */
+    td img{
+      border-radius:10px;
+      object-fit:cover;
+    }
+    .btn{
+        margin-top: 30px;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <h4>⚙️ لوحة الأدمن</h4>
+
+  <a href="#">🏠 الرئيسية</a>
+  <a href="home.html">🛍️ المنتجات</a>
+  <a href="orders.html">🛒 الطلبات</a>
+  <a href="catergory.html">🧩 الأقسام</a>
+<a href="reports.html">📊 التقارير</a>
+  <a href="users.html">👤 المستخدمين</a>
+<a href="#" onclick="logout()">🚪 تسجيل خروج</a>
+</div>
+
+<!-- Main -->
+<div class="main">
+
+  <h2 class="mb-4">إدارة المنتجات 🛍️</h2>
+
+  <!-- Stats -->
+  <div class="row g-3 mb-4">
+
+    <div class="col-md-4">
+      <div class="card card-box p-3 text-center">
+        <h5>عدد المنتجات</h5>
+        <h3 id="count">0</h3>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card card-box p-3 text-center">
+        <h5>طلبات اليوم</h5>
+        <h3>12</h3>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card card-box p-3 text-center">
+        <h5>المبيعات</h5>
+        <h3>$0</h3>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Form -->
+  <div class="card card-box p-3 mb-4">
+    <h5>➕ إضافة / تعديل منتج</h5>
+
+    <input type="hidden" id="index">
+
+    <input type="text" id="name" class="form-control mb-2" placeholder="اسم المنتج">
+    <input type="text" id="price" class="form-control mb-2" placeholder="السعر">
+    <input type="text" id="img" class="form-control mb-2" placeholder="رابط الصورة">
+    <input type="text" id="desc" class="form-control mb-2" placeholder="الوصف">
+
+    <button class="btn btn-success" onclick="saveProduct()">حفظ المنتج</button>
+    <button class="btn btn-secondary" onclick="clearForm()">إلغاء</button>
+  </div>
+<!-- Category Form -->
+<div class="card card-box p-3 mb-4">
+  <h5>📂 إدارة الأقسام</h5>
+
+  <input type="hidden" id="catIndex">
+
+  <input type="text" id="catName" class="form-control mb-2" placeholder="اسم القسم">
+  <input type="text" id="catImg" class="form-control mb-2" placeholder="رابط صورة القسم">
+
+  <button class="btn btn-primary" onclick="saveCategory()">حفظ القسم</button>
+  <button class="btn btn-secondary" onclick="clearCatForm()">إلغاء</button>
+</div>
+
+<!-- Category Table -->
+<div class="card card-box p-3 mb-4">
+
+  <h5>🧩 قائمة الأقسام</h5>
+
+  <table class="table table-hover text-center align-middle mt-3">
+
+    <thead class="table-dark">
+      <tr>
+        <th>الصورة</th>
+        <th>اسم القسم</th>
+        <th>إجراءات</th>
+      </tr>
+    </thead>
+
+    <tbody id="categoryTable"></tbody>
+
+  </table>
+
+</div>
+  <!-- Table -->
+  <div class="card card-box p-3">
+
+    <h5>📦 قائمة المنتجات</h5>
+
+    <table class="table table-hover text-center align-middle mt-3">
+
+      <thead class="table-dark">
+        <tr>
+          <th>الصورة</th>
+          <th>الاسم</th>
+          <th>السعر</th>
+          <th>الوصف</th>
+          <th>إجراءات</th>
+        </tr>
+      </thead>
+
+      <tbody id="productTable"></tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+<script>
+
+let products = JSON.parse(localStorage.getItem("products")) || [];
+
+/* حفظ / إضافة / تعديل */
+function saveProduct(){
+
+  let name = document.getElementById("name").value;
+  let price = document.getElementById("price").value;
+  let img = document.getElementById("img").value;
+  let desc = document.getElementById("desc").value;
+  let index = document.getElementById("index").value;
+
+  if(name === "" || price === ""){
+    return alert("رجاءً أدخل اسم المنتج والسعر");
+  }
+
+  let product = { name, price, img, desc };
+
+  if(index === ""){
+    products.push(product);
+  } else {
+    products[index] = product;
+  }
+
+  localStorage.setItem("products", JSON.stringify(products));
+
+  render();
+  clearForm();
+}
+
+/* عرض المنتجات */
+function render(){
+
+  let table = document.getElementById("productTable");
+  table.innerHTML = "";
+
+  products.forEach((p, i) => {
+
+    table.innerHTML += `
+      <tr>
+        <td><img src="${p.img}" width="60" height="60"></td>
+        <td>${p.name}</td>
+        <td>${p.price}</td>
+        <td>${p.desc || "-"}</td>
+        <td>
+          <button class="btn btn-warning btn-sm" onclick="editProduct(${i})">تعديل</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteProduct(${i})">حذف</button>
+        </td>
+      </tr>
+    `;
+  });
+
+  document.getElementById("count").innerText = products.length;
+}
+
+/* تعديل */
+function editProduct(i){
+  document.getElementById("name").value = products[i].name;
+  document.getElementById("price").value = products[i].price;
+  document.getElementById("img").value = products[i].img;
+  document.getElementById("desc").value = products[i].desc;
+  document.getElementById("index").value = i;
+}
+
+/* حذف */
+function deleteProduct(i){
+  if(confirm("هل تريد حذف المنتج؟")){
+    products.splice(i,1);
+    localStorage.setItem("products", JSON.stringify(products));
+    render();
+  }
+}
+
+/* تنظيف */
+function clearForm(){
+  document.getElementById("name").value = "";
+  document.getElementById("price").value = "";
+  document.getElementById("img").value = "";
+  document.getElementById("desc").value = "";
+  document.getElementById("index").value = "";
+}
+
+render();
+
+    function logout(){
+
+  // حذف بيانات المستخدم (الأدمن)
+  localStorage.removeItem("user");
+
+  // (اختياري) حذف كل البيانات
+  // localStorage.clear();
+
+  alert("تم تسجيل الخروج بنجاح 👋");
+
+  // تحويل لصفحة تسجيل الدخول
+  window.location.href = "login.html";
+}
+// 📂 الأقسام
+let categories = JSON.parse(localStorage.getItem("categories")) || [];
+
+/* حفظ قسم */
+function saveCategory(){
+
+  let name = document.getElementById("catName").value;
+  let img = document.getElementById("catImg").value;
+  let index = document.getElementById("catIndex").value;
+
+  if(name === ""){
+    return alert("اكتب اسم القسم");
+  }
+
+  let category = { name, img };
+
+  if(index === ""){
+    categories.push(category);
+  } else {
+    categories[index] = category;
+  }
+
+  localStorage.setItem("categories", JSON.stringify(categories));
+
+  renderCategories();
+  clearCatForm();
+}
+
+/* عرض الأقسام */
+function renderCategories(){
+
+  let table = document.getElementById("categoryTable");
+  table.innerHTML = "";
+
+  categories.forEach((c, i) => {
+
+    table.innerHTML += `
+      <tr>
+        <td><img src="${c.img}" width="60" height="60"></td>
+        <td>${c.name}</td>
+        <td>
+          <button class="btn btn-warning btn-sm" onclick="editCategory(${i})">تعديل</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteCategory(${i})">حذف</button>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+/* تعديل */
+function editCategory(i){
+  document.getElementById("catName").value = categories[i].name;
+  document.getElementById("catImg").value = categories[i].img;
+  document.getElementById("catIndex").value = i;
+}
+
+/* حذف */
+function deleteCategory(i){
+  if(confirm("حذف القسم؟")){
+    categories.splice(i,1);
+    localStorage.setItem("categories", JSON.stringify(categories));
+    renderCategories();
+  }
+}
+
+/* تنظيف */
+function clearCatForm(){
+  document.getElementById("catName").value = "";
+  document.getElementById("catImg").value = "";
+  document.getElementById("catIndex").value = "";
+}
+
+renderCategories();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - TransVid</title>
+    
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        .form-logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-logo i {
+            font-size: 50px; /* حجم الأيقونة */
+            color: #916243; /* لون بني متناسق مع أزرار TransVid */
+            display: block; /* لضمان التوسيط بشكل صحيح */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="form-logo">
+        <i class="fas fa-sign-in-alt"></i>
+    </div>
+
+    <h2>تسجيل الدخول</h2>
+
+    <div class="role-selection">
+        <select id="userRole">
+            <option value="user">دخول كمستخدم عادي</option>
+            <option value="admin">دخول كمسؤول (Admin)</option>
+        </select>
+    </div>
+
+    <input id="email" type="email" placeholder="البريد الإلكتروني">
+    <div id="emailError" class="error">الرجاء إدخال البريد الإلكتروني</div>
+
+    <div class="password-container">
+        <input id="password" type="password" placeholder="كلمة المرور">
+        <span class="toggle-password" onclick="togglePassword()">👁️</span>
+    </div>
+    <div id="passwordError" class="error">الرجاء إدخال كلمة المرور</div>
+
+    <a class="forgot-password" href="forgot-password.html">
+        هل نسيت كلمة المرور؟
+    </a>
+
+    <button onclick="login()">دخول</button>
+    <div class="switch" onclick="goToRegister()">إنشاء حساب</div>
+</div>
+
+<script>
+// وظيفة إظهار وإخفاء كلمة المرور
+function togglePassword() {
+    const passwordInput = document.getElementById("password");
+    passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+}
+
+// وظيفة تسجيل الدخول مع المسارات المعدلة حسب مجلداتك
+function login() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const role = document.getElementById("userRole").value;
+
+    let isValid = true;
+
+    // التحقق من الحقول
+    if (email.trim() === "") {
+        document.getElementById("emailError").style.display = "block";
+        isValid = false;
+    } else {
+        document.getElementById("emailError").style.display = "none";
+    }
+
+    if (password.trim() === "") {
+        document.getElementById("passwordError").style.display = "block";
+        isValid = false;
+    } else {
+        document.getElementById("passwordError").style.display = "none";
+    }
+
+    // إذا كانت البيانات صحيحة، التوجيه للمسار المناسب
+    if (isValid) {
+        if (role === "admin") {
+            // التوجيه لصفحة الأدمن: الخروج من login ثم الدخول لـ adminn
+            window.location.href = "adminn/home.html";
+        } else {
+            // التوجيه لصفحة المستخدم العادي
+            window.location.href = "index2.html";
+        }
+    }
+}
+
+function goToRegister() {
+    window.location.href = "index2.html";
+}
+</script>
+
+</body>
+</html>

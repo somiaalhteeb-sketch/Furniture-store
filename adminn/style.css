@@ -1,0 +1,146 @@
+* {
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f7f3ee;
+  padding: 15px;
+}
+
+.container {
+  width: 100%;
+  max-width: 400px;
+  background: #fff;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  color: #333;
+}
+
+/* تنسيق حقل اختيار الدور */
+.role-selection {
+  margin-bottom: 10px;
+}
+
+.role-selection select {
+  direction: rtl;
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  background-color: #fff;
+  cursor: pointer;
+  outline: none;
+}
+
+/* الحقول */
+input {
+  direction: rtl;
+  text-align: right;
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  outline: none;
+}
+
+input:focus, select:focus {
+  border-color: #916243;
+}
+
+/* حاوية الباسورد */
+.password-container {
+  position: relative;
+}
+
+.password-container input {
+  padding-left: 40px; /* لترك مساحة لأيقونة العين */
+}
+
+/* زر العين */
+.toggle-password {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 16px;
+  color: #555;
+}
+
+.forgot-password {
+  display: block;
+  text-align: right;
+  font-size: 12px;
+  color: #9a9491;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  text-decoration: none;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+.error {
+  color: red;
+  font-size: 13px;
+  text-align: right;
+  display: none;
+  margin-top: -5px;
+  margin-bottom: 10px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  background: #916243;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 15px;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: #5a3e2b;
+}
+
+.switch {
+  margin-top: 15px;
+  cursor: pointer;
+  color: #9a9491;
+  font-size: 14px;
+}
+
+/* 📱 استجابة الشاشات (Responsive) */
+@media (max-width: 480px){
+  .container{ padding:20px; border-radius:12px; }
+  h2{ font-size:18px; }
+  input, select, button{ padding:10px; font-size:13px; }
+}
+
+@media (min-width: 481px) and (max-width: 768px){
+  .container{ max-width:450px; }
+}
+
+@media (min-width: 1200px){
+  .container{ max-width:420px; }
+}

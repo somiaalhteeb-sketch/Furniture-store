@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المفضلة - متجرك</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background: #f7f3ee; /* توحيد لون الخلفية الخشبي */
+  margin: 0;
+  padding: 20px;
+}
+
+/* زر الرجوع */
+.back-btn-container {
+    max-width: 800px;
+    margin: 0 auto 15px;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #916243;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.3s;
+    border: none;
+    cursor: pointer;
+}
+
+.back-btn:hover {
+    background: #5a3e2b;
+    transform: translateX(-5px);
+}
+
+/* الهيدر */
+.header{
+  max-width: 800px;
+  margin: auto;
+  background: #fff;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h2{
+  margin: 0;
+  color: #333;
+  font-size: 20px;
+}
+
+/* عداد */
+.badge{
+  background: #ff4757;
+  color: #fff;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* الحاوية */
+.container{
+  max-width: 800px;
+  margin: 20px auto;
+}
+
+/* كرت المفضلة */
+.fav-item{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  padding: 15px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  transition: 0.3s;
+}
+
+.fav-item:hover{
+  transform: translateY(-2px);
+}
+
+.fav-item img{
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #eee;
+}
+
+.info{
+  flex: 1;
+  margin-right: 20px;
+}
+
+.info h4{
+  margin: 0;
+  font-size: 17px;
+  color: #444;
+}
+
+.info p{
+  margin: 8px 0 0 0;
+  color: #916243;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* أزرار */
+.actions{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn{
+  border: none;
+  padding: 8px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: bold;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: center;
+}
+
+.remove{
+  background: #fceaea;
+  color: #ff4757;
+}
+
+.remove:hover {
+    background: #ff4757;
+    color: #fff;
+}
+
+.cart{
+  background: #916243;
+  color: #fff;
+}
+
+.cart:hover {
+    background: #5a3e2b;
+}
+
+/* رسالة فارغة */
+.empty{
+  text-align: center;
+  color: #bbb;
+  margin-top: 80px;
+  font-size: 18px;
+}
+
+/* نافذة الصح الخضراء (تظهر في المنتصف فوق الكل) */
+.success-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: rgba(255, 255, 255, 0.98);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    z-index: 9999;
+    text-align: center;
+    border: 2px solid #2ed573;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.success-popup.show {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.success-popup i {
+    font-size: 50px;
+    color: #2ed573;
+    display: block;
+    margin-bottom: 10px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div id="successPopup" class="success-popup">
+    <i class="fas fa-check-circle"></i>
+    <span id="popupMsg">تمت العملية!</span>
+</div>
+
+<div class="back-btn-container">
+    <a href="javascript:history.back()" class="back-btn">
+        <i class="fas fa-chevron-right"></i> رجوع للخلف
+    </a>
+</div>
+
+<div class="header">
+  <h2>❤️ المفضلة</h2>
+  <div class="badge" id="count">0</div>
+</div>
+
+<div class="container" id="favorites"></div>
+
+<script>
+
+let fav = JSON.parse(localStorage.getItem("fav")) || [];
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+let container = document.getElementById("favorites");
+let count = document.getElementById("count");
+
+/* وظيفة إظهار الصح الأخضر المخصصة */
+function showStatus(msg) {
+    const popup = document.getElementById("successPopup");
+    document.getElementById("popupMsg").innerText = msg;
+    popup.classList.add("show");
+    setTimeout(() => {
+        popup.classList.remove("show");
+    }, 2000);
+}
+
+/* عرض المفضلة */
+function renderFav(){
+  container.innerHTML = "";
+  count.innerText = fav.length;
+
+  if(fav.length === 0){
+    container.innerHTML = `
+        <div class='empty'>
+            <i class="far fa-heart" style="font-size: 50px; display: block; margin-bottom: 10px;"></i>
+            المفضلة فارغة حالياً 😢
+        </div>`;
+    return;
+  }
+
+  fav.forEach((item, index) => {
+    container.innerHTML += `
+      <div class="fav-item">
+        <img src="${item.img}">
+        <div class="info">
+          <h4>${item.name}</h4>
+          <p>${item.price}</p>
+        </div>
+        <div class="actions">
+          <button class="btn cart" onclick="addToCart(${index})">
+            <i class="fas fa-shopping-cart"></i> إضافة للسلة
+          </button>
+          <button class="btn remove" onclick="removeFav(${index})">
+            <i class="fas fa-trash-alt"></i> حذف
+          </button>
+        </div>
+      </div>
+    `;
+  });
+}
+
+/* حذف من المفضلة */
+function removeFav(i){
+  fav.splice(i, 1);
+  localStorage.setItem("fav", JSON.stringify(fav));
+  renderFav();
+}
+
+/* إضافة للسلة مع عرض الصح الأخضر */
+function addToCart(i){
+  let item = fav[i];
+  cart.push(item);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  
+  showStatus("تمت الإضافة للسلة 🛒");
+}
+
+renderFav();
+
+</script>
+
+</body>
+</html>

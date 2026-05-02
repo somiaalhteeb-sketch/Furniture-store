@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الطلبات - متجرك</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background:#f7f3ee; /* الخلفية الخشبية الموحدة */
+  margin:0;
+  padding:20px;
+}
+
+/* زر الرجوع */
+.back-btn-container {
+    max-width: 900px;
+    margin: 0 auto 15px;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #916243;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.3s;
+    border: none;
+    cursor: pointer;
+}
+
+.back-btn:hover {
+    background: #5a3e2b;
+    transform: translateX(-5px);
+}
+
+/* الهيدر */
+.header{
+  max-width: 900px;
+  margin: auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.header h2 { margin: 0; color: #333; }
+
+/* أزرار الفلترة */
+.filters{
+  max-width: 900px;
+  margin: 15px auto;
+  display: flex;
+  gap: 10px;
+}
+
+.filters button{
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background: #fff;
+  color: #916243;
+  font-weight: bold;
+  border: 1px solid #916243;
+  transition: 0.3s;
+}
+
+.filters button:hover, .filters button.active {
+  background: #916243;
+  color: #fff;
+}
+
+.container{
+  max-width: 900px;
+  margin: auto;
+}
+
+/* كرت الطلب */
+.order{
+  background: #fff;
+  padding: 20px;
+  margin-bottom: 15px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  border-right: 5px solid #916243;
+}
+
+.top{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.order-id { font-weight: bold; color: #555; }
+
+.status{
+  padding: 5px 12px;
+  border-radius: 20px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.pending { background: #f39c12; } /* برتقالي قيد التنفيذ */
+.done { background: #27ae60; }    /* أخضر مكتمل */
+
+.order p { margin: 5px 0; color: #666; font-size: 14px; }
+.order p b { color: #333; }
+
+.actions{
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+}
+
+.btn{
+  flex: 1;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: 0.3s;
+}
+
+.view{ background: #e8f4fd; color: #3498db; }
+.view:hover { background: #3498db; color: #fff; }
+
+.delete{ background: #fceaea; color: #e74c3c; }
+.delete:hover { background: #e74c3c; color: #fff; }
+
+.empty{
+  text-align: center;
+  margin-top: 100px;
+  color: #bbb;
+  font-size: 18px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="back-btn-container">
+    <a href="javascript:history.back()" class="back-btn">
+        <i class="fas fa-chevron-right"></i> رجوع للخلف
+    </a>
+</div>
+
+<div class="header">
+  <h2>📦 سجل الطلبات</h2>
+</div>
+
+<div class="filters">
+  <button id="filter-all" class="active" onclick="setFilter('all')">الكل</button>
+  <button id="filter-pending" onclick="setFilter('قيد التنفيذ')">قيد التنفيذ</button>
+  <button id="filter-done" onclick="setFilter('مكتمل')">مكتمل</button>
+</div>
+
+<div class="container" id="orders"></div>
+
+<script>
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+let container = document.getElementById("orders");
+let currentFilter = "all";
+
+/* وظيفة الفلترة */
+function setFilter(type){
+  currentFilter = type;
+  
+  // تحديث شكل الأزرار النشطة
+  document.querySelectorAll('.filters button').forEach(btn => btn.classList.remove('active'));
+  if(type === 'all') document.getElementById('filter-all').classList.add('active');
+  else if(type === 'قيد التنفيذ') document.getElementById('filter-pending').classList.add('active');
+  else if(type === 'مكتمل') document.getElementById('filter-done').classList.add('active');
+
+  render();
+}
+
+/* عرض الطلبات */
+function render(){
+  container.innerHTML = "";
+
+  // فلترة الطلبات بناءً على الحالة
+  let filtered = orders.filter(o => {
+    return currentFilter === "all" || o.status === currentFilter;
+  });
+
+  if(filtered.length === 0){
+    container.innerHTML = `
+      <div class='empty'>
+        <i class="fas fa-box-open" style="font-size: 50px; display:block; margin-bottom:10px;"></i>
+        لا توجد طلبات في هذا القسم
+      </div>`;
+    return;
+  }
+
+  filtered.forEach((order, index) => {
+    let statusClass = order.status === "مكتمل" ? "done" : "pending";
+    
+    // حساب الفهرس الحقيقي في المصفوفة الأصلية للحذف والتفاصيل
+    let originalIndex = orders.indexOf(order);
+
+    container.innerHTML += `
+      <div class="order">
+        <div class="top">
+          <div class="order-id">رقم الطلب: #${order.id || (1000 + originalIndex)}</div>
+          <div class="status ${statusClass}">${order.status || 'قيد التنفيذ'}</div>
+        </div>
+
+        <p><i class="far fa-calendar-alt"></i> التاريخ: <b>${order.date}</b></p>
+        <p><i class="fas fa-money-bill-wave"></i> الإجمالي: <b>${order.total} $</b></p>
+
+        <div class="actions">
+          <button class="btn view" onclick="viewOrder(${originalIndex})">
+            <i class="fas fa-file-invoice"></i> التفاصيل
+          </button>
+          <button class="btn delete" onclick="deleteOrder(${originalIndex})">
+            <i class="fas fa-trash-alt"></i> حذف
+          </button>
+        </div>
+      </div>
+    `;
+  });
+}
+
+/* حذف الطلب */
+function deleteOrder(i){
+  if(confirm("هل أنت متأكد من حذف هذا الطلب من السجل؟")) {
+    orders.splice(i, 1);
+    localStorage.setItem("orders", JSON.stringify(orders));
+    render();
+  }
+}
+
+/* فتح تفاصيل الطلب */
+function viewOrder(i){
+  localStorage.setItem("selectedOrder", JSON.stringify(orders[i]));
+  window.location.href = "order-details.html";
+}
+
+// تشغيل العرض عند التحميل
+render();
+</script>
+
+</body>
+</html>

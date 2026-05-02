@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>متجر الأثاث</title>
+  <link rel="stylesheet" href="css/style2.css">
+</head>
+
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+
+  <div class="menu-area">
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+  </div>
+
+  <div class="left-brand">
+    <div class="title">متجرك</div>
+    <div class="logo">🏠</div>
+  </div>
+
+</nav>
+
+<!-- القائمة -->
+<div id="sideMenu" class="side-menu">
+  <div class="menu-header">القائمة</div>
+
+  <a href="index.html">🏠 الرئيسية</a>
+  <a href="orders.html">  🛒 الطلبات </a>
+  <a href="favorites.html"> ❤️ المفضلات</a>
+  <a href="offers.html">🔥 العروض</a>
+  <a href="department.html">🧩 الأقسام</a>
+  <a href="contact.html"> 📞 تواصل معنا</a>
+<a href="#" onclick="logout()">🚪 تسجيل خروج</a>
+</div>
+
+<div id="overlay" onclick="toggleMenu()"></div>
+
+<!-- 🔎 Search -->
+<div class="search-box">
+  <input type="text" id="searchInput" placeholder="ابحث عن منتج..." oninput="searchProducts()">
+</div>
+
+<!-- Products -->
+<div class="products-container">
+
+  <!-- CARD 1 -->
+  <div class="product-card">
+
+    <div class="fav" onclick="toggleFav(this)">🤍</div>
+
+    <img src="img/غرفه 1.jpg">
+
+    <h3>غرفة نوم فاخرة</h3>
+
+    <p class="price">250$</p>
+
+    <button class="btn" onclick="addToCart(this)">🛒 إضافة</button>
+    <button class="btn" onclick="openProduct(this)">تفاصيل</button>
+
+    <span class="data"
+      data-name="غرفة نوم فاخرة"
+      data-img="غرفة2
+      data-price="250$"
+      data-desc="غرفة نوم فاخرة مريحة بتصميم حديث">
+    </span>
+
+  </div>
+
+  <!-- CARD 2 -->
+  <div class="product-card">
+    <div class="fav" onclick="toggleFav(this)">🤍</div>
+    <img src="img/غرفة نوم2.jpg"
+    <h3>سرير خشبي فاخر</h3>
+    <p class="price">400$</p>
+    <button class="btn" onclick="addToCart(this)">🛒 إضافة</button>
+    <button class="btn" onclick="openProduct(this)">تفاصيل</button>
+
+    <span class="data"
+      data-name="سرير خشبي فاخر"
+      data-img="img/غرفة2.jpg"
+      data-price="400$"
+      data-desc="سرير خشبي فاخر وانيق مع اضاءة">
+    </span>
+  </div>
+  <!-- CARD 3 -->
+  <div class="product-card">
+    <div class="fav" onclick="toggleFav(this)">🤍</div>
+    <img src="img/غرفه3.jpg">
+    <h3>سرير مودرن</h3>
+    <p class="price">900$</p>
+    <button class="btn" onclick="addToCart(this)">🛒 إضافة</button>
+    <button class="btn" onclick="openProduct(this)">تفاصيل</button>
+
+    <span class="data"
+      data-name="سرير مودرن"
+      data-img="img/غرفه3.jpg"
+      data-price="900$"
+      data-desc="سرير مودرن نيو كلاسيك بتصميم حديث ">
+    </span>
+  </div>
+
+    <!-- CARD 4 -->
+ <div class="product-card">
+    <div class="fav" onclick="toggleFav(this)">🤍</div>
+    <img src="img/غرفه3.jpg">
+    <h3>سرير مودرن</h3>
+    <p class="price">900$</p>
+    <button class="btn" onclick="addToCart(this)">🛒 إضافة</button>
+    <button class="btn" onclick="openProduct(this)">تفاصيل</button>
+
+    <span class="data"
+      data-name="سرير مودرن"
+      data-img="img/غرفه3.jpg"
+      data-price="900$"
+      data-desc="سرير مودرن نيو كلاسيك بتصميم حديث ">
+    </span>
+  </div>
+
+    <!-- CARD 5 -->
+ <div class="product-card">
+
+    <div class="fav" onclick="toggleFav(this)">🤍</div>
+
+    <img src="img/غرفه 1.jpg">
+
+    <h3>غرفة نوم فاخرة</h3>
+
+    <p class="price">250$</p>
+
+    <button class="btn" onclick="addToCart(this)">🛒 إضافة</button>
+    <button class="btn" onclick="openProduct(this)">تفاصيل</button>
+
+    <span class="data"
+      data-name="غرفة نوم فاخرة"
+      data-img="img/غرفه 1.jpg"
+      data-price="250$"
+      data-desc="غرفة نوم فاخرة مريحة بتصميم حديث">
+    </span>
+
+  </div>
+    <!-- CARD 6 -->
+  <div class="product-card">
+    <div class="fav" onclick="toggleFav(this)">🤍</div>
+    <img src="img/غرفة2.jpg">
+    <h3>سرير خشبي فاخر</h3>
+    <p class="price">400$</p>
+    <button class="btn" onclick="addToCart(this)">🛒 إضافة</button>
+    <button class="btn" onclick="openProduct(this)">تفاصيل</button>
+
+    <span class="data"
+      data-name="سرير خشبي فاخر"
+      data-img="img/غرفة2.jpg"
+      data-price="400$"
+      data-desc="سرير خشبي فاخر وانيق مع اضاءة">
+    </span>
+  </div>
+</div>
+<footer class="footer">
+  <div class="footer-container">
+
+    <div class="footer-section">
+      <h3>متجرك 🏠</h3>
+      <p>أفضل متجر للأثاث العصري والمريح بأسعار مناسبة.</p>
+    </div>
+
+    <div class="footer-section">
+      <h3>روابط سريعة</h3>
+      <a href="index.html.html">الرئيسية</a>
+      <a href="orders.html">الطلبات</a>
+      <a href="favorites.html">المفضلات</a>
+    </div>
+
+    <div class="footer-section">
+      <h3>تواصل معنا</h3>
+      <p>📞 +967 7XXXXXXX</p>
+      <p>📧 support@yourstore.com</p>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    © 2026 جميع الحقوق محفوظة
+  </div>
+</footer>
+<script>
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let fav = JSON.parse(localStorage.getItem("fav")) || [];
+
+/* 🛒 إضافة للسلة */
+function addToCart(btn){
+  let card = btn.parentElement;
+
+  let product = {
+    name: card.querySelector("h3").innerText,
+    img: card.querySelector("img").src,
+    price: card.querySelector(".price").innerText
+  };
+
+  cart.push(product);
+  localStorage.setItem("cart", JSON.stringify(cart));
+
+  alert("تمت الإضافة 🛒");
+}
+
+/* ❤️ إضافة / حذف من المفضلة */
+function toggleFav(el){
+  let card = el.parentElement;
+
+  let product = {
+    name: card.querySelector("h3").innerText,
+    img: card.querySelector("img").src,
+    price: card.querySelector(".price").innerText
+  };
+
+  let index = fav.findIndex(p => p.name === product.name);
+
+  if(index === -1){
+    fav.push(product);
+    el.innerHTML = "❤️";
+  } else {
+    fav.splice(index, 1);
+    el.innerHTML = "🤍";
+  }
+
+  localStorage.setItem("fav", JSON.stringify(fav));
+}
+
+/* ❤️ تحديث شكل القلوب عند فتح الصفحة */
+function loadFavState(){
+  document.querySelectorAll(".product-card").forEach(card => {
+
+    let name = card.querySelector("h3").innerText;
+    let heart = card.querySelector(".fav");
+
+    let exists = fav.find(p => p.name === name);
+
+    heart.innerHTML = exists ? "❤️" : "🤍";
+  });
+}
+loadFavState();
+
+/* 🔎 بحث */
+function searchProducts(){
+  let val = document.getElementById("searchInput").value.toLowerCase();
+  let cards = document.querySelectorAll(".product-card");
+
+  cards.forEach(c=>{
+    let name = c.querySelector("h3").innerText.toLowerCase();
+    c.style.display = name.includes(val) ? "block" : "none";
+  });
+}
+
+/* 📦 تفاصيل */
+function openProduct(btn){
+
+  let card = btn.parentElement;
+  let data = card.querySelector(".data");
+
+  let product = {
+    name: data.dataset.name,
+    img: data.dataset.img,
+    price: data.dataset.price,
+    desc: data.dataset.desc
+  };
+
+  localStorage.setItem("product", JSON.stringify(product));
+
+  window.location.href = "details.html";
+}
+
+/* ☰ menu */
+function toggleMenu(){
+  document.getElementById("sideMenu").classList.toggle("active");
+  document.getElementById("overlay").classList.toggle("active");
+}
+
+function logout(){
+
+  // حذف بيانات تسجيل الدخول (إذا عندك مستخدم)
+  localStorage.removeItem("user");
+
+  // اختياري: تنظيف الجلسة بالكامل
+  // localStorage.clear();
+
+  alert("تم تسجيل الخروج بنجاح 👋");
+
+  // تحويل لصفحة الدخول أو الرئيسية
+  window.location.href = "login.html";
+}
+
+</script>
+
+</body>
+</html>

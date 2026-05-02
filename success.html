@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>تم بنجاح</title>
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+.container {
+  text-align: center;
+}
+
+/* دائرة الأيقونة */
+.circle {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 15px;
+  border-radius: 50%;
+  background: #ca9572;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: pop 0.4s ease;
+}
+
+/* علامة الصح */
+.checkmark {
+  width: 60px;
+  height: 60px;
+  stroke: #fff;
+  stroke-width: 4;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: draw 1s ease forwards;
+}
+
+/* رسم العلامة */
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ظهور الدائرة */
+@keyframes pop {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.success {
+  color: #ca9572;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- الأيقونة -->
+  <div class="circle">
+    <svg viewBox="0 0 52 52">
+      <path class="checkmark" d="M14 27 L22 35 L38 17"></path>
+    </svg>
+  </div>
+
+  <h2 class="success" id="msg">🎉 تم بنجاح</h2>
+  <p>يمكنك الآن تسجيل الدخول</p>
+
+  <button onclick="goToLogin()">تسجيل الدخول</button>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const type = params.get("type");
+
+const msg = document.getElementById("msg");
+
+if (type === "register") {
+  msg.innerText = "🎉 تم إنشاء الحساب بنجاح";
+} 
+else if (type === "reset") {
+  msg.innerText = "🎉 تم إعادة تعيين كلمة المرور بنجاح";
+}
+else {
+  msg.innerText = "🎉 تم إعادة تعيين كلمة المرور بنجاح  ";
+}
+
+function goToLogin(){
+  window.location.href = "login.html";
+}
+</script>
+
+</body>
+</html>

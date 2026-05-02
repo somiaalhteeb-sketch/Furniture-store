@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>تفاصيل المنتج</title>
+  <link rel="stylesheet" href="css/style2.css">
+</head>
+<body>
+
+<div class="details">
+
+  <img src="img/sofa1.jpg" class="details-img">
+
+  <h2>أريكة فاخرة</h2>
+
+  <p class="price">250$</p>
+
+  <p class="desc">
+    أريكة مريحة مصنوعة من أجود الخامات، مناسبة لغرفة المعيشة.
+  </p>
+
+  <div class="qty">
+    <button onclick="changeQty(-1)">-</button>
+    <input type="number" id="qty" value="1" min="1">
+    <button onclick="changeQty(1)">+</button>
+  </div>
+
+  <button class="cart-btn">أضف إلى السلة</button>
+
+</div>
+
+<script>
+function changeQty(val){
+  let qty = document.getElementById("qty");
+  qty.value = Math.max(1, parseInt(qty.value) + val);
+}
+</script>
+
+</body>
+</html>

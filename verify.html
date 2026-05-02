@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>التحقق</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+.code-container {
+  display: flex;
+  justify-content: space-between;
+  direction: ltr;
+  margin-top: 10px;
+}
+
+.code-container input {
+  width: 45px;
+  height: 50px;
+  font-size: 20px;
+  text-align: center;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.info {
+  font-size: 14px;
+  color: #555;
+  text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h2>أدخل رمز التحقق</h2>
+
+  <p class="info">تم إرسال رمز إلى بريدك الإلكتروني</p>
+
+  <div class="code-container">
+    <input maxlength="1" oninput="move(this,0)">
+    <input maxlength="1" oninput="move(this,1)">
+    <input maxlength="1" oninput="move(this,2)">
+    <input maxlength="1" oninput="move(this,3)">
+    <input maxlength="1" oninput="move(this,4)">
+    <input maxlength="1" oninput="move(this,5)">
+  </div>
+
+</div>
+
+<script>
+const inputs = document.querySelectorAll(".code-container input");
+
+const mode = localStorage.getItem("authMode") || "login";
+
+function move(el, index) {
+  if (el.value.length === 1 && index < inputs.length - 1) {
+    inputs[index + 1].focus();
+  }
+
+  let filled = true;
+  inputs.forEach(i => {
+    if (i.value === "") filled = false;
+  });
+
+  if (filled) {
+    setTimeout(() => {
+
+      if (mode === "reset") {
+        window.location.href = "reset-password.html";
+      } 
+      else if (mode === "register") {
+        window.location.href = "success.html?type=register";
+      } 
+      else {
+        window.location.href = "success.html";
+      }
+
+    }, 500);
+  }
+}
+</script>
+
+</body>
+</html>
